@@ -18,9 +18,6 @@ android:
     # if you need to run emulator(s) during your tests
     - sys-img-armeabi-v7a-android-21
 
-    - extra-google-m2repository
-    - extra-android-m2repository
-
 env:
   global:
    # install timeout in minutes (2 minutes by default)
