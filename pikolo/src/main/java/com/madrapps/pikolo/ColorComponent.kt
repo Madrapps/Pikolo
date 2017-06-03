@@ -9,7 +9,8 @@ abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
 
     var radius: Float = 0f
     var strokeWidth: Float = 0f
-    var indicatorSize: Float = 0f
+    var indicatorRadius: Float = 0f
+    var indicatorStrokeWidth: Float = 0f
     var indicatorX: Float = 0f
     var indicatorY: Float = 0f
 
@@ -29,11 +30,15 @@ abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
                 if (PointF(x, y) in this) {
                     isTouched = true
                     calculateAngle(x, y)
+                    updateComponent(angle)
                 }
             }
 
             MotionEvent.ACTION_MOVE -> {
-                if (isTouched) calculateAngle(x, y)
+                if (isTouched){
+                    calculateAngle(x, y)
+                    updateComponent(angle)
+                }
             }
 
             MotionEvent.ACTION_UP -> {
@@ -45,7 +50,7 @@ abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
     }
 
     operator fun contains(point: PointF): Boolean {
-        return point.x in (indicatorX - indicatorSize)..(indicatorX + indicatorSize) && point.y in (indicatorY - indicatorSize)..(indicatorY + indicatorSize)
+        return point.x in (indicatorX - indicatorRadius)..(indicatorX + indicatorRadius) && point.y in (indicatorY - indicatorRadius)..(indicatorY + indicatorRadius)
     }
 
     open fun calculateAngle(x1: Float, y1: Float) {
@@ -58,5 +63,7 @@ abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
             angle = 360 - angle
         }
     }
+
+    open fun updateComponent(angle: Double) {}
 
 }

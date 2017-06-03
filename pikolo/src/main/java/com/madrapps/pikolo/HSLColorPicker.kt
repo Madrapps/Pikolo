@@ -14,22 +14,35 @@ class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Attribut
 
     private val hueComponent: ColorComponent = HueComponent(metrics, paints)
     private val saturationComponent: ColorComponent = SaturationComponent(metrics, paints)
+    private val lightnessComponent: ColorComponent = LightnessComponent(metrics, paints)
 
     private val INDICATOR_RADIUS = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics)
     private val STROKE_WIDTH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
+    private val INDICATOR_STROKE_WIDTH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f, resources.displayMetrics)
+
+    private val INNER_RADIUS_GAP = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, resources.displayMetrics)
 
     init {
         hueComponent.strokeWidth = STROKE_WIDTH
-        hueComponent.indicatorSize = INDICATOR_RADIUS
+        hueComponent.indicatorRadius = INDICATOR_RADIUS
+        hueComponent.indicatorStrokeWidth = INDICATOR_STROKE_WIDTH
+
         saturationComponent.strokeWidth = STROKE_WIDTH
-        saturationComponent.indicatorSize = INDICATOR_RADIUS
+        saturationComponent.indicatorRadius = INDICATOR_RADIUS
+        saturationComponent.indicatorStrokeWidth = INDICATOR_STROKE_WIDTH
+
+        lightnessComponent.strokeWidth = STROKE_WIDTH
+        lightnessComponent.indicatorRadius = INDICATOR_RADIUS
+        lightnessComponent.indicatorStrokeWidth = INDICATOR_STROKE_WIDTH
 
         saturationComponent.angle = 240.0
+        lightnessComponent.angle = 60.0
     }
 
     override fun onDraw(canvas: Canvas) {
         hueComponent.drawComponent(canvas)
         saturationComponent.drawComponent(canvas)
+        lightnessComponent.drawComponent(canvas)
     }
 
     override fun onSizeChanged(width: Int, height: Int, oldW: Int, oldH: Int) {
@@ -38,15 +51,22 @@ class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         val padding = (paddingLeft + paddingRight + paddingTop + paddingBottom) / 4f
 
         hueComponent.radius = minimumSize.toFloat() / 2f - padding - STROKE_WIDTH - INDICATOR_RADIUS
-        saturationComponent.radius = hueComponent.radius - 80f
+        saturationComponent.radius = hueComponent.radius - INNER_RADIUS_GAP
+        lightnessComponent.radius = saturationComponent.radius
 
         metrics.centerX = width / 2f
         metrics.centerY = height / 2f
+
+        hueComponent.updateComponent(hueComponent.angle)
+        saturationComponent.updateComponent(saturationComponent.angle)
+        lightnessComponent.updateComponent(lightnessComponent.angle)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (!hueComponent.onTouchEvent(event)) {
-            saturationComponent.onTouchEvent(event)
+            if (!saturationComponent.onTouchEvent(event)) {
+                lightnessComponent.onTouchEvent(event)
+            }
         }
         invalidate()
         return true

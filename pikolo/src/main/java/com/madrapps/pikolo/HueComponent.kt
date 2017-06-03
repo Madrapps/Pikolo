@@ -44,20 +44,15 @@ class HueComponent(metrics: Metrics, paints: Paints) : ColorComponent(metrics, p
         val indicatorPaint = paints.indicatorPaint
         indicatorPaint.style = Paint.Style.FILL
         indicatorPaint.color = Color.HSVToColor(floatArrayOf(angle.toFloat(), 1f, 1f))
-        canvas.drawCircle(indicatorX, indicatorY, indicatorSize, indicatorPaint)
+        canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
 
         indicatorPaint.style = Paint.Style.STROKE
-        indicatorPaint.strokeWidth = 5f
+        indicatorPaint.strokeWidth = indicatorStrokeWidth
         indicatorPaint.color = Color.WHITE
-        canvas.drawCircle(indicatorX, indicatorY, indicatorSize, indicatorPaint)
+        canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
     }
 
-    override fun calculateAngle(x1: Float, y1: Float) {
-        super.calculateAngle(x1, y1)
-        onHueChanged(angle)
-    }
-
-    private fun onHueChanged(hue: Double) {
-        metrics.color = Color.HSVToColor(floatArrayOf(hue.toFloat(), 1f, 1f))
+    override fun updateComponent(angle: Double) {
+        metrics.hsl[0] = angle.toFloat()
     }
 }
