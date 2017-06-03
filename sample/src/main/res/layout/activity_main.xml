@@ -9,7 +9,7 @@
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="81dp">
 
-    <com.madrapps.pikolo.ColorPicker
+    <com.madrapps.pikolo.HSLColorPicker
         android:id="@+id/a"
         android:layout_width="0dp"
         android:layout_height="0dp"
