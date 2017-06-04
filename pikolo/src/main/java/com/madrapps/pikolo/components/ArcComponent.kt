@@ -60,7 +60,7 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
             getColorPositionArray()
             shader = SweepGradient(centerX, centerY, colors, colorPosition)
             // We need a margin of rotation due to the Paint.Cap.Round
-            matrix.setRotate(arcStartAngle - strokeWidth/2f, centerX, centerY)
+            matrix.setRotate(arcStartAngle - strokeWidth / 2f, centerX, centerY)
             shader.setLocalMatrix(matrix)
         }
 
@@ -118,8 +118,15 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
         }
 
         val baseAngle = relativeAngle - arcStartAngle
-        val saturation = (baseAngle / arcLength).toFloat()
+        val component = (baseAngle / arcLength).toFloat()
 
-        metrics.hsl[hslIndex] = saturation
+        metrics.hsl[hslIndex] = component
+    }
+
+    override fun updateAngle(component: Float) {
+        val baseAngle = component * arcLength
+        val relativeAngle = baseAngle + arcStartAngle
+
+        angle = relativeAngle.toDouble()
     }
 }

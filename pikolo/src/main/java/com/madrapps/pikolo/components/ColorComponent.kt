@@ -74,7 +74,9 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
         }
     }
 
-    open fun updateComponent(angle: Double) {}
+    abstract fun updateComponent(angle: Double)
+
+    abstract fun updateAngle(component: Float)
 
     internal fun setColorSelectionListener(listener: OnColorSelectionListener) {
         colorSelectionListener = listener

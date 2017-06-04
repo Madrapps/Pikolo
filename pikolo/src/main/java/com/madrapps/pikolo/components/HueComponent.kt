@@ -57,4 +57,8 @@ internal class HueComponent(metrics: Metrics, paints: Paints) : ColorComponent(m
     override fun updateComponent(angle: Double) {
         metrics.hsl[0] = angle.toFloat()
     }
+
+    override fun updateAngle(component: Float) {
+        angle = metrics.hsl[0].toDouble()
+    }
 }

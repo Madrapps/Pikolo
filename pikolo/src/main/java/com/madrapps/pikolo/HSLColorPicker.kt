@@ -2,6 +2,7 @@ package com.madrapps.pikolo
 
 import android.content.Context
 import android.graphics.Canvas
+import android.support.v4.graphics.ColorUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
@@ -81,5 +82,15 @@ class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         hueComponent.setColorSelectionListener(listener)
         saturationComponent.setColorSelectionListener(listener)
         lightnessComponent.setColorSelectionListener(listener)
+    }
+
+    fun setColor(color: Int) {
+        with(metrics) {
+            ColorUtils.colorToHSL(color, hsl)
+            hueComponent.updateAngle(hsl[0])
+            saturationComponent.updateAngle(hsl[1])
+            lightnessComponent.updateAngle(hsl[2])
+        }
+        invalidate()
     }
 }
