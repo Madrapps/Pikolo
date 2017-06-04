@@ -60,7 +60,8 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
     }
 
     operator fun contains(point: PointF): Boolean {
-        return point.x in (indicatorX - indicatorRadius)..(indicatorX + indicatorRadius) && point.y in (indicatorY - indicatorRadius)..(indicatorY + indicatorRadius)
+        val touchRadius = indicatorRadius + indicatorRadius*0.2
+        return point.x in (indicatorX - touchRadius)..(indicatorX + touchRadius) && point.y in (indicatorY - touchRadius)..(indicatorY + touchRadius)
     }
 
     open fun calculateAngle(x1: Float, y1: Float) {

@@ -27,13 +27,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        colorPicker = (HSLColorPicker) findViewById(R.id.colorPicker);
         imageView = (ImageView) findViewById(R.id.imageView);
 
+        colorPicker = (HSLColorPicker) findViewById(R.id.colorPicker);
         colorPicker.setColorSelectionListener(new SimpleColorSelectionListener() {
             @Override
             public void onColorSelected(int color) {
+                // Do whatever you want with the color
                 imageView.getBackground().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
             }
         });
