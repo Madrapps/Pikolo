@@ -1,9 +1,11 @@
-package com.madrapps.pikolo
+package com.madrapps.pikolo.components
 
 import android.graphics.*
 import android.support.v4.graphics.ColorUtils
+import com.madrapps.pikolo.Metrics
+import com.madrapps.pikolo.Paints
 
-abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorComponent(metrics, paints) {
+internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorComponent(metrics, paints) {
     internal val NO_OF_COLORS = 11
 
     internal val colors = IntArray(NO_OF_COLORS)

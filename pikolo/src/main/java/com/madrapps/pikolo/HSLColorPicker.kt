@@ -6,6 +6,11 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import com.madrapps.pikolo.components.ColorComponent
+import com.madrapps.pikolo.components.HueComponent
+import com.madrapps.pikolo.components.LightnessComponent
+import com.madrapps.pikolo.components.SaturationComponent
+import com.madrapps.pikolo.listeners.OnColorSelectionListener
 
 class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
@@ -70,5 +75,11 @@ class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         }
         invalidate()
         return true
+    }
+
+    fun setColorSelectionListener(listener: OnColorSelectionListener) {
+        hueComponent.setColorSelectionListener(listener)
+        saturationComponent.setColorSelectionListener(listener)
+        lightnessComponent.setColorSelectionListener(listener)
     }
 }

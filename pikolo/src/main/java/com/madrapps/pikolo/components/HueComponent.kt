@@ -1,8 +1,10 @@
-package com.madrapps.pikolo
+package com.madrapps.pikolo.components
 
 import android.graphics.*
+import com.madrapps.pikolo.Metrics
+import com.madrapps.pikolo.Paints
 
-class HueComponent(metrics: Metrics, paints: Paints) : ColorComponent(metrics, paints) {
+internal class HueComponent(metrics: Metrics, paints: Paints) : ColorComponent(metrics, paints) {
 
     private val colors = IntArray(360)
     private lateinit var shader: Shader

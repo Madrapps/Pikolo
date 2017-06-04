@@ -1,11 +1,16 @@
-package com.madrapps.pikolo
+package com.madrapps.pikolo.components
 
 import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.Shader
 import android.view.MotionEvent
+import android.view.MotionEvent.*
+import com.madrapps.pikolo.Metrics
+import com.madrapps.pikolo.Paints
+import com.madrapps.pikolo.color
+import com.madrapps.pikolo.listeners.OnColorSelectionListener
 
-abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
+internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
 
     var radius: Float = 0f
     var strokeWidth: Float = 0f
@@ -17,6 +22,7 @@ abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
     var angle: Double = 0.0
 
     private var isTouched = false
+    private var colorSelectionListener: OnColorSelectionListener? = null
 
     abstract fun getShader(): Shader
     abstract fun drawComponent(canvas: Canvas)
@@ -26,22 +32,26 @@ abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
         val y = event.y
 
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
+            ACTION_DOWN -> {
                 if (PointF(x, y) in this) {
+                    colorSelectionListener?.onColorSelectionStart(metrics.color())
                     isTouched = true
                     calculateAngle(x, y)
                     updateComponent(angle)
+                    colorSelectionListener?.onColorSelected(metrics.color())
                 }
             }
 
-            MotionEvent.ACTION_MOVE -> {
-                if (isTouched){
+            ACTION_MOVE -> {
+                if (isTouched) {
                     calculateAngle(x, y)
                     updateComponent(angle)
+                    colorSelectionListener?.onColorSelected(metrics.color())
                 }
             }
 
-            MotionEvent.ACTION_UP -> {
+            ACTION_UP -> {
+                if (isTouched) colorSelectionListener?.onColorSelectionEnd(metrics.color())
                 isTouched = false
             }
         }
@@ -66,4 +76,7 @@ abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
 
     open fun updateComponent(angle: Double) {}
 
+    internal fun setColorSelectionListener(listener: OnColorSelectionListener) {
+        colorSelectionListener = listener
+    }
 }
