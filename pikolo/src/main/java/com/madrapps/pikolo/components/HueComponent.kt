@@ -9,6 +9,10 @@ internal class HueComponent(metrics: Metrics, paints: Paints) : ColorComponent(m
     private val colors = IntArray(360)
     private lateinit var shader: Shader
 
+    init {
+        angle = 330.0
+    }
+
     override fun getShader(): Shader {
         shader = SweepGradient(metrics.centerX, metrics.centerY, getColorArray(), null)
         return shader

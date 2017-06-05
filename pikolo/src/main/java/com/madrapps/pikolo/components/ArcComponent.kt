@@ -6,18 +6,23 @@ import com.madrapps.pikolo.Metrics
 import com.madrapps.pikolo.Paints
 
 internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorComponent(metrics, paints) {
-    internal val NO_OF_COLORS = 11
 
+    internal val NO_OF_COLORS = 11
     internal val colors = IntArray(NO_OF_COLORS)
+
     private val colorPosition = FloatArray(NO_OF_COLORS)
     private val matrix = Matrix()
-
     private lateinit var shader: Shader
     private var innerCircleArcReference: RectF? = null
 
-    protected abstract val arcLength: Float
-    protected abstract val arcStartAngle: Float
-    internal abstract val hslIndex: Int
+    abstract val hslIndex: Int
+    abstract val arcLength: Float
+    abstract val arcStartAngle: Float
+    val arcEndAngle: Float
+        get() {
+            val end = arcStartAngle + arcLength
+            if (end > 360f) return end - 360f else return end
+        }
 
     override fun drawComponent(canvas: Canvas) {
         drawShader(canvas)
@@ -26,7 +31,6 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
 
     private fun drawShader(canvas: Canvas) {
         val shaderPaint = paints.shaderPaint
-
         shaderPaint.shader = getShader()
         shaderPaint.style = Paint.Style.STROKE
         shaderPaint.strokeWidth = strokeWidth
@@ -84,37 +88,59 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
 
     override fun calculateAngle(x1: Float, y1: Float) {
         super.calculateAngle(x1, y1)
+        // Don't let the indicator go outside the arc
+        // limit the indicator between arcStartAngle and arcEndAngle
+        val associatedArcLength = 360f - arcLength
+        val middleOfAssociatedArc = arcEndAngle + associatedArcLength / 2f
+        if (arcEndAngle < arcStartAngle) {
+            calculateAngleInContinuousRange(middleOfAssociatedArc)
+        } else if (arcEndAngle > arcStartAngle) {
+            calculateAngleInNonContinuousRange(middleOfAssociatedArc)
+        }
+    }
 
-        // limit the angle between (arcStartAngle) and (arcStartAngle + arcLength)
-        var arcEndAngle = arcStartAngle + arcLength
+    /**
+     * This would be the case when [arcStartAngle]=285 and [arcEndAngle]=75, so that the arc has the 0 degree crossover. This means that the
+     * associated arc (360 - [arcLength]) is a continuous range. When the angle is in this range, we need to either set it to the [arcStartAngle]
+     * or the [arcEndAngle]
+     *
+     * @param middle the middle point (in angle) of the associated arc
+     */
+    private fun calculateAngleInContinuousRange(middle: Float) {
+        when (angle) {
+            in arcEndAngle..middle -> angle = arcEndAngle.toDouble()
+            in middle..arcStartAngle -> angle = arcStartAngle.toDouble()
+        }
+    }
 
-        if (arcEndAngle > 360f) {
-            // The shader range is not contiguous. But the non-shader range is contiguous
-            arcEndAngle -= 360f
-            val outsideArcAngle = arcStartAngle - arcEndAngle
+    /**
+     * This is the case where the arc is a continuous range, i.e, the 0 crossover occurs in the associated arc. This can happen in two ways.
+     *
+     * 1. The [middle] point can be before the 0 degree. Eg. [arcStartAngle]=10 and [arcEndAngle]=120
+     * 2. The [middle] point can be after the 0 degree. Eg. [arcStartAngle]=100 and [arcEndAngle]=350
+     *
+     * @param middle the middle point (in angle) of the associated arc
+     */
+    private fun calculateAngleInNonContinuousRange(middle: Float) {
+        if (middle > 360f) {
+            val correctedMiddle = middle - 360f
             when (angle) {
-                in arcEndAngle..arcEndAngle + outsideArcAngle / 2f -> angle = arcEndAngle.toDouble()
-                in arcEndAngle + outsideArcAngle / 2f..arcStartAngle -> angle = arcStartAngle.toDouble()
+                in arcEndAngle..360f, in 0f..correctedMiddle -> angle = arcEndAngle.toDouble()
+                in correctedMiddle..arcStartAngle -> angle = arcStartAngle.toDouble()
             }
         } else {
-            // The shader range is contiguous. But the non-shader range is non-contiguous
-            if (angle < arcStartAngle) {
-                angle = arcStartAngle.toDouble()
-            } else if (angle > arcEndAngle) {
-                angle = arcEndAngle.toDouble()
+            when (angle) {
+                in arcEndAngle..middle -> angle = arcEndAngle.toDouble()
+                in middle..360f, in 0f..arcStartAngle -> angle = arcStartAngle.toDouble()
             }
         }
     }
 
     override fun updateComponent(angle: Double) {
-        var arcEndAngle = arcStartAngle + arcLength
         var relativeAngle = angle
 
-        if (arcEndAngle > 360) {
-            arcEndAngle -= 360
-            if (relativeAngle in 0f..arcEndAngle) {
-                relativeAngle += 360f
-            }
+        if (arcEndAngle < arcStartAngle && relativeAngle in 0f..arcEndAngle) {
+            relativeAngle += 360f
         }
 
         val baseAngle = relativeAngle - arcStartAngle
@@ -129,4 +155,5 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
 
         angle = relativeAngle.toDouble()
     }
+
 }
