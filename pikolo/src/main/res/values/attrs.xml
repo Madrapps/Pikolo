@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="HSLColorPicker">
+        <attr name="hue_stroke_width" format="dimension" />
+        <attr name="saturation_stroke_width" format="dimension" />
+        <attr name="lightness_stroke_width" format="dimension" />
+
+        <attr name="hue_indicator_radius" format="dimension" />
+        <attr name="saturation_indicator_radius" format="dimension" />
+        <attr name="lightness_indicator_radius" format="dimension" />
+
+        <attr name="hue_indicator_stroke_width" format="dimension" />
+        <attr name="saturation_indicator_stroke_width" format="dimension" />
+        <attr name="lightness_indicator_stroke_width" format="dimension" />
+
+        <attr name="saturation_start_angle" format="float" />
+        <attr name="saturation_arc_length" format="float" />
+
+        <attr name="lightness_start_angle" format="float" />
+        <attr name="lightness_arc_length" format="float" />
+
+        <attr name="hue_radius_offset" format="dimension" />
+        <attr name="saturation_radius_offset" format="dimension" />
+        <attr name="lightness_radius_offset" format="dimension" />
+    </declare-styleable>
+
+</resources>
