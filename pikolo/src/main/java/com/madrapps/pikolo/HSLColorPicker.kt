@@ -16,7 +16,7 @@ import com.madrapps.pikolo.listeners.OnColorSelectionListener
 
 class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
-    private val metrics = Metrics()
+    private val metrics = Metrics(density = resources.displayMetrics.density)
     private val paints = Paints()
 
     private val hueComponent: ColorComponent = HueComponent(metrics, paints)
