@@ -60,7 +60,7 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
     }
 
     operator fun contains(point: PointF): Boolean {
-        val touchRadius = indicatorRadius + indicatorRadius*0.2
+        val touchRadius = indicatorRadius + indicatorRadius * 0.2
         return point.x in (indicatorX - touchRadius)..(indicatorX + touchRadius) && point.y in (indicatorY - touchRadius)..(indicatorY + touchRadius)
     }
 
@@ -81,5 +81,9 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
 
     internal fun setColorSelectionListener(listener: OnColorSelectionListener) {
         colorSelectionListener = listener
+    }
+
+    internal fun setRadius(outerRadius: Float, offset: Float) {
+        radius = outerRadius - (Math.max(indicatorRadius + indicatorStrokeWidth, strokeWidth)) - offset
     }
 }

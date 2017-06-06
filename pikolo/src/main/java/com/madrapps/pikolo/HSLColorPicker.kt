@@ -13,36 +13,55 @@ import com.madrapps.pikolo.components.LightnessComponent
 import com.madrapps.pikolo.components.SaturationComponent
 import com.madrapps.pikolo.listeners.OnColorSelectionListener
 
+
 class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
-    private val metrics = Metrics()
+    private val metrics = Metrics(density = resources.displayMetrics.density)
     private val paints = Paints()
 
-    private val hueComponent: ColorComponent = HueComponent(metrics, paints)
-    private val saturationComponent: ColorComponent = SaturationComponent(metrics, paints)
-    private val lightnessComponent: ColorComponent = LightnessComponent(metrics, paints)
+    private val hueComponent: ColorComponent
+    private val saturationComponent: ColorComponent
+    private val lightnessComponent: ColorComponent
 
-    private val INDICATOR_RADIUS = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15f, resources.displayMetrics)
-    private val STROKE_WIDTH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5f, resources.displayMetrics)
-    private val INDICATOR_STROKE_WIDTH = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f, resources.displayMetrics)
-
-    private val INNER_RADIUS_GAP = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25f, resources.displayMetrics)
+    private val hueRadiusOffset: Float
+    private val saturationRadiusOffset: Float
+    private val lightnessRadiusOffset: Float
 
     init {
-        hueComponent.strokeWidth = STROKE_WIDTH
-        hueComponent.indicatorRadius = INDICATOR_RADIUS
-        hueComponent.indicatorStrokeWidth = INDICATOR_STROKE_WIDTH
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.HSLColorPicker, defStyleAttr, 0)
 
-        saturationComponent.strokeWidth = STROKE_WIDTH
-        saturationComponent.indicatorRadius = INDICATOR_RADIUS
-        saturationComponent.indicatorStrokeWidth = INDICATOR_STROKE_WIDTH
+        val saturationArcLength = typedArray.getFloat(R.styleable.HSLColorPicker_saturation_arc_length, 155f)
+        val saturationStartAngle = typedArray.getFloat(R.styleable.HSLColorPicker_saturation_start_angle, 100f)
 
-        lightnessComponent.strokeWidth = STROKE_WIDTH
-        lightnessComponent.indicatorRadius = INDICATOR_RADIUS
-        lightnessComponent.indicatorStrokeWidth = INDICATOR_STROKE_WIDTH
+        saturationComponent = SaturationComponent(metrics, paints, saturationArcLength, saturationStartAngle)
 
-        saturationComponent.angle = 240.0
-        lightnessComponent.angle = 60.0
+        val lightnessArcLength = typedArray.getFloat(R.styleable.HSLColorPicker_lightness_arc_length, 155f)
+        val lightnessStartAngle = typedArray.getFloat(R.styleable.HSLColorPicker_lightness_start_angle, 280f)
+
+        lightnessComponent = LightnessComponent(metrics, paints, lightnessArcLength, lightnessStartAngle)
+
+        val hueArcLength = typedArray.getFloat(R.styleable.HSLColorPicker_hue_arc_length, 360f)
+        val hueStartAngle = typedArray.getFloat(R.styleable.HSLColorPicker_hue_start_angle, 0f)
+
+        hueComponent = HueComponent(metrics, paints, hueArcLength, hueStartAngle)
+
+        hueComponent.strokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_hue_stroke_width, dp(5f))
+        hueComponent.indicatorStrokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_hue_indicator_stroke_width, dp(2f))
+        hueComponent.indicatorRadius = typedArray.getDimension(R.styleable.HSLColorPicker_hue_indicator_radius, dp(15f))
+
+        saturationComponent.strokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_saturation_stroke_width, dp(5f))
+        saturationComponent.indicatorStrokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_saturation_indicator_stroke_width, dp(2f))
+        saturationComponent.indicatorRadius = typedArray.getDimension(R.styleable.HSLColorPicker_saturation_indicator_radius, dp(15f))
+
+        lightnessComponent.strokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_lightness_stroke_width, dp(5f))
+        lightnessComponent.indicatorStrokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_lightness_indicator_stroke_width, dp(2f))
+        lightnessComponent.indicatorRadius = typedArray.getDimension(R.styleable.HSLColorPicker_lightness_indicator_radius, dp(15f))
+
+        hueRadiusOffset = typedArray.getDimension(R.styleable.HSLColorPicker_hue_radius_offset, dp(1f))
+        saturationRadiusOffset = typedArray.getDimension(R.styleable.HSLColorPicker_saturation_radius_offset, dp(25f))
+        lightnessRadiusOffset = typedArray.getDimension(R.styleable.HSLColorPicker_lightness_radius_offset, dp(25f))
+
+        typedArray.recycle()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -53,12 +72,12 @@ class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Attribut
 
     override fun onSizeChanged(width: Int, height: Int, oldW: Int, oldH: Int) {
         val minimumSize = if (width > height) height else width
-
         val padding = (paddingLeft + paddingRight + paddingTop + paddingBottom) / 4f
+        val outerRadius = minimumSize.toFloat() / 2f - padding
 
-        hueComponent.radius = minimumSize.toFloat() / 2f - padding - STROKE_WIDTH - INDICATOR_RADIUS
-        saturationComponent.radius = hueComponent.radius - INNER_RADIUS_GAP
-        lightnessComponent.radius = saturationComponent.radius
+        hueComponent.setRadius(outerRadius, hueRadiusOffset)
+        saturationComponent.setRadius(outerRadius, saturationRadiusOffset)
+        lightnessComponent.setRadius(outerRadius, lightnessRadiusOffset)
 
         metrics.centerX = width / 2f
         metrics.centerY = height / 2f
@@ -93,4 +112,9 @@ class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         }
         invalidate()
     }
+
+    private fun dp(value: Float): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, resources.displayMetrics)
+    }
+
 }
