@@ -3,7 +3,8 @@
 
 An android color picker library
 
-<img src="/preview/preview-full.gif" alt="preview" title="preview" width="303" height="300" align="right" vspace="20" />
+<img src="/preview/arc-selectors.gif" alt="preview" title="preview" width="200" height="200" align="right" vspace="40" />
+<img src="/preview/preview-full.gif" alt="preview" title="preview" width="200" height="200" align="right" vspace="40" />
 
 Download
 -----
