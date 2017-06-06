@@ -7,10 +7,10 @@ import com.madrapps.pikolo.Paints
 
 internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorComponent(metrics, paints) {
 
-    internal val NO_OF_COLORS = 11
-    internal val colors = IntArray(NO_OF_COLORS)
+    abstract val NO_OF_COLORS: Int
+    internal abstract val colors: IntArray
+    internal abstract val colorPosition: FloatArray
 
-    private val colorPosition = FloatArray(NO_OF_COLORS)
     private val matrix = Matrix()
     private lateinit var shader: Shader
     private var innerCircleArcReference: RectF? = null
@@ -18,6 +18,11 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
     abstract val hslIndex: Int
     abstract val arcLength: Float
     abstract val arcStartAngle: Float
+    /**
+     * This is the max value of the component. For now the min value is taken as 0
+     */
+    abstract val range: Float
+
     val arcEndAngle: Float
         get() {
             val end = arcStartAngle + arcLength
@@ -25,11 +30,11 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
         }
 
     override fun drawComponent(canvas: Canvas) {
-        drawShader(canvas)
+        drawArc(canvas)
         drawIndicator(canvas)
     }
 
-    private fun drawShader(canvas: Canvas) {
+    internal open fun drawArc(canvas: Canvas) {
         val shaderPaint = paints.shaderPaint
         shaderPaint.shader = getShader()
         shaderPaint.style = Paint.Style.STROKE
@@ -42,7 +47,7 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
         canvas.drawArc(innerCircleArcReference, arcStartAngle, arcLength, false, shaderPaint)
     }
 
-    private fun drawIndicator(canvas: Canvas) {
+    internal open fun drawIndicator(canvas: Canvas) {
         indicatorX = (metrics.centerX + radius * Math.cos(Math.toRadians(angle))).toFloat()
         indicatorY = (metrics.centerY + radius * Math.sin(Math.toRadians(angle))).toFloat()
 
@@ -143,13 +148,13 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
         }
 
         val baseAngle = relativeAngle - arcStartAngle
-        val component = (baseAngle / arcLength)
+        val component = (baseAngle / arcLength) * range
 
         metrics.hsl[hslIndex] = component.toFloat()
     }
 
     override fun updateAngle(component: Float) {
-        val baseAngle = component * arcLength
+        val baseAngle = component/range * arcLength
         val relativeAngle = baseAngle + arcStartAngle
 
         angle = relativeAngle.toDouble()

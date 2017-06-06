@@ -19,7 +19,7 @@ class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Attribut
     private val metrics = Metrics(density = resources.displayMetrics.density)
     private val paints = Paints()
 
-    private val hueComponent: ColorComponent = HueComponent(metrics, paints)
+    private val hueComponent: ColorComponent
     private val saturationComponent: ColorComponent
     private val lightnessComponent: ColorComponent
 
@@ -39,6 +39,11 @@ class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         val lightnessStartAngle = typedArray.getFloat(R.styleable.HSLColorPicker_lightness_start_angle, 280f)
 
         lightnessComponent = LightnessComponent(metrics, paints, lightnessArcLength, lightnessStartAngle)
+
+        val hueArcLength = typedArray.getFloat(R.styleable.HSLColorPicker_hue_arc_length, 360f)
+        val hueStartAngle = typedArray.getFloat(R.styleable.HSLColorPicker_hue_start_angle, 0f)
+
+        hueComponent = HueComponent(metrics, paints, hueArcLength, hueStartAngle)
 
         hueComponent.strokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_hue_stroke_width, dp(5f))
         hueComponent.indicatorStrokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_hue_indicator_stroke_width, dp(2f))

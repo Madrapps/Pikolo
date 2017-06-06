@@ -14,6 +14,9 @@
         <attr name="saturation_indicator_stroke_width" format="dimension" />
         <attr name="lightness_indicator_stroke_width" format="dimension" />
 
+        <attr name="hue_start_angle" format="float" />
+        <attr name="hue_arc_length" format="float" />
+
         <attr name="saturation_start_angle" format="float" />
         <attr name="saturation_arc_length" format="float" />
 
