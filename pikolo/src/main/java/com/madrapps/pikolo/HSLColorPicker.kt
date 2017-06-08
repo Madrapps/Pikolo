@@ -97,13 +97,14 @@ class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        var isTouched = true
         if (!hueComponent.onTouchEvent(event)) {
             if (!saturationComponent.onTouchEvent(event)) {
-                lightnessComponent.onTouchEvent(event)
+                 isTouched = lightnessComponent.onTouchEvent(event)
             }
         }
         invalidate()
-        return true
+        return isTouched
     }
 
     fun setColorSelectionListener(listener: OnColorSelectionListener) {
