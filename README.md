@@ -1,5 +1,6 @@
 # Pikolo
 [![Build Status](https://travis-ci.org/Madrapps/Pikolo.svg?branch=master)](https://travis-ci.org/Madrapps/Pikolo)
+[ ![Download](https://api.bintray.com/packages/madrapps/maven/com.github.madrapps%3Apikolo/images/download.svg) ](https://bintray.com/madrapps/maven/com.github.madrapps%3Apikolo/_latestVersion)
 
 An android color picker library
 
