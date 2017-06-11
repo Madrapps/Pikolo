@@ -2,6 +2,8 @@ package com.madrapps.pikolo
 
 import android.content.Context
 import android.graphics.Canvas
+import android.os.Parcel
+import android.os.Parcelable
 import android.support.v4.graphics.ColorUtils
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -100,7 +102,7 @@ class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         var isTouched = true
         if (!hueComponent.onTouchEvent(event)) {
             if (!saturationComponent.onTouchEvent(event)) {
-                 isTouched = lightnessComponent.onTouchEvent(event)
+                isTouched = lightnessComponent.onTouchEvent(event)
             }
         }
         invalidate()
@@ -127,4 +129,44 @@ class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Attribut
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, resources.displayMetrics)
     }
 
+
+    override fun onSaveInstanceState(): Parcelable {
+        val bundle = super.onSaveInstanceState()
+        val savedState = SavedState(bundle)
+        savedState.color = ColorUtils.HSLToColor(metrics.hsl)
+        return savedState
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state is SavedState) {
+            super.onRestoreInstanceState(state.superState)
+            setColor(state.color)
+        } else {
+            super.onRestoreInstanceState(state)
+        }
+    }
+
+    internal class SavedState : BaseSavedState {
+        var color: Int = 0
+
+        constructor(bundle: Parcelable) : super(bundle)
+
+        private constructor(parcel: Parcel) : super(parcel) {
+            color = parcel.readInt()
+        }
+
+        companion object {
+            @JvmField val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
+                override fun createFromParcel(source: Parcel): SavedState = SavedState(source)
+                override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
+            }
+        }
+
+        override fun describeContents() = 0
+
+        override fun writeToParcel(dest: Parcel, flags: Int) {
+            super.writeToParcel(dest, flags)
+            dest.writeInt(color)
+        }
+    }
 }
