@@ -14,6 +14,7 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
     private val matrix = Matrix()
     private lateinit var shader: Shader
     private var innerCircleArcReference: RectF? = null
+    private val borderColor = floatArrayOf(0f, 0.8f, 1f)
 
     abstract val hslIndex: Int
     abstract val arcLength: Float
@@ -36,16 +37,24 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
 
     internal open fun drawArc(canvas: Canvas) {
         val shaderPaint = paints.shaderPaint
-        shaderPaint.shader = getShader()
         shaderPaint.style = Paint.Style.STROKE
-        shaderPaint.strokeWidth = strokeWidth
         shaderPaint.strokeCap = Paint.Cap.ROUND
 
         if (innerCircleArcReference == null) {
             innerCircleArcReference = RectF(metrics.centerX - radius, metrics.centerY - radius, metrics.centerX + radius, metrics.centerY + radius)
         }
+        if (borderWidth > 0) {
+            shaderPaint.shader = null
+            shaderPaint.color = if (strokeColor == 0) Color.WHITE else strokeColor
+            shaderPaint.strokeWidth = strokeWidth + borderWidth*2
+            canvas.drawArc(innerCircleArcReference, arcStartAngle, arcLength, false, shaderPaint)
+        }
+
+        shaderPaint.strokeWidth = strokeWidth
+        shaderPaint.shader = getShader()
         canvas.drawArc(innerCircleArcReference, arcStartAngle, arcLength, false, shaderPaint)
     }
+
 
     internal open fun drawIndicator(canvas: Canvas) {
         indicatorX = (metrics.centerX + radius * Math.cos(Math.toRadians(angle))).toFloat()
@@ -54,13 +63,39 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
         val indicatorPaint = paints.indicatorPaint
         indicatorPaint.style = Paint.Style.FILL
 
-        indicatorPaint.color = ColorUtils.HSLToColor(metrics.hsl)
+        val color = ColorUtils.HSLToColor(metrics.hsl)
+        indicatorPaint.color = color
         canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
 
-        indicatorPaint.style = Paint.Style.STROKE
-        indicatorPaint.strokeWidth = indicatorStrokeWidth
-        indicatorPaint.color = Color.WHITE
-        canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
+        if (indicatorStrokeWidth > 0) {
+            indicatorPaint.color = getBorderColor(color)
+            indicatorPaint.style = Paint.Style.STROKE
+            indicatorPaint.strokeWidth = indicatorStrokeWidth
+            canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
+        }
+    }
+
+    private fun getBorderColor(color: Int): Int {
+        if (indicatorStrokeColor != 0) {
+            return indicatorStrokeColor
+        }
+        borderColor[0] = metrics.hsl[0]
+        val contrastW = ColorUtils.calculateContrast(color, Color.WHITE)
+        val contrastB = ColorUtils.calculateContrast(color, Color.BLACK)
+        when {
+            contrastB - contrastW > 16 -> borderColor[2] = 0f
+            contrastB - contrastW > 10 -> borderColor[2] = 0.1f
+            contrastB - contrastW > 6 -> borderColor[2] = 0.2f
+            contrastB - contrastW > 4 -> borderColor[2] = 0.3f
+            contrastB - contrastW > 2 -> borderColor[2] = 0.4f
+            contrastB - contrastW > 0 -> borderColor[2] = 0.5f
+            contrastB - contrastW > -2 -> borderColor[2] = 0.6f
+            contrastB - contrastW > -4 -> borderColor[2] = 0.7f
+            contrastB - contrastW > -8 -> borderColor[2] = 0.8f
+            contrastB - contrastW > -12 -> borderColor[2] = 0.9f
+            else -> borderColor[2] = 1f
+        }
+        return ColorUtils.HSLToColor(borderColor)
     }
 
     override fun getShader(): Shader {
@@ -154,7 +189,7 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
     }
 
     override fun updateAngle(component: Float) {
-        val baseAngle = component/range * arcLength
+        val baseAngle = component / range * arcLength
         val relativeAngle = baseAngle + arcStartAngle
 
         angle = relativeAngle.toDouble()

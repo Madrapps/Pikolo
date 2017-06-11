@@ -28,19 +28,4 @@ internal class HueComponent(metrics: Metrics, paints: Paints, override val arcLe
         return colors
     }
 
-    override fun drawIndicator(canvas: Canvas) {
-        indicatorX = (metrics.centerX + radius * Math.cos(Math.toRadians(angle))).toFloat()
-        indicatorY = (metrics.centerY + radius * Math.sin(Math.toRadians(angle))).toFloat()
-
-        val indicatorPaint = paints.indicatorPaint
-        indicatorPaint.style = Paint.Style.FILL
-
-        indicatorPaint.color = ColorUtils.HSLToColor(floatArrayOf(metrics.hsl[0], 1f, 0.5f))
-        canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
-
-        indicatorPaint.style = Paint.Style.STROKE
-        indicatorPaint.strokeWidth = indicatorStrokeWidth
-        indicatorPaint.color = Color.WHITE
-        canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
-    }
 }
