@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.github.madrapps:pikolo:1.1.5'
+  compile 'com.github.madrapps:pikolo:1.1.6'
 }
 ```
 
