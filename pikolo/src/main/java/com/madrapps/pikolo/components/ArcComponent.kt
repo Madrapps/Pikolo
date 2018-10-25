@@ -27,7 +27,7 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
     val arcEndAngle: Float
         get() {
             val end = arcStartAngle + arcLength
-            if (end > 360f) return end - 360f else return end
+            return if (end > 360f) end - 360f else end
         }
 
     override fun drawComponent(canvas: Canvas) {
@@ -82,18 +82,19 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
         borderColor[0] = metrics.hsl[0]
         val contrastW = ColorUtils.calculateContrast(color, Color.WHITE)
         val contrastB = ColorUtils.calculateContrast(color, Color.BLACK)
-        when {
-            contrastB - contrastW > 16 -> borderColor[2] = 0f
-            contrastB - contrastW > 10 -> borderColor[2] = 0.1f
-            contrastB - contrastW > 6 -> borderColor[2] = 0.2f
-            contrastB - contrastW > 4 -> borderColor[2] = 0.3f
-            contrastB - contrastW > 2 -> borderColor[2] = 0.4f
-            contrastB - contrastW > 0 -> borderColor[2] = 0.5f
-            contrastB - contrastW > -2 -> borderColor[2] = 0.6f
-            contrastB - contrastW > -4 -> borderColor[2] = 0.7f
-            contrastB - contrastW > -8 -> borderColor[2] = 0.8f
-            contrastB - contrastW > -12 -> borderColor[2] = 0.9f
-            else -> borderColor[2] = 1f
+        val contrastDifference = contrastB - contrastW
+        borderColor[2] = when {
+            contrastDifference > 16 -> 0f
+            contrastDifference > 10 -> 0.1f
+            contrastDifference > 6 -> 0.2f
+            contrastDifference > 4 -> 0.3f
+            contrastDifference > 2 -> 0.4f
+            contrastDifference > 0 -> 0.5f
+            contrastDifference > -2 -> 0.6f
+            contrastDifference > -4 -> 0.7f
+            contrastDifference > -8 -> 0.8f
+            contrastDifference > -12 -> 0.9f
+            else -> 1f
         }
         return ColorUtils.HSLToColor(borderColor)
     }
@@ -112,7 +113,7 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
     }
 
     internal open fun getColorArray(hsl: FloatArray): IntArray {
-        for (i in 0..NO_OF_COLORS - 1) {
+        for (i in 0 until NO_OF_COLORS) {
             hsl[hslIndex] = i.toFloat() / (NO_OF_COLORS - 1)
             colors[i] = ColorUtils.HSLToColor(hsl)
         }
@@ -120,7 +121,7 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
     }
 
     private fun getColorPositionArray(): FloatArray {
-        for (i in 0..NO_OF_COLORS - 1) {
+        for (i in 0 until NO_OF_COLORS) {
             colorPosition[i] = i * (arcLength / (NO_OF_COLORS - 1)) / 360f
         }
         return colorPosition
