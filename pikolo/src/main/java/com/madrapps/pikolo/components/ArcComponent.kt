@@ -43,16 +43,18 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
         if (innerCircleArcReference == null) {
             innerCircleArcReference = RectF(metrics.centerX - radius, metrics.centerY - radius, metrics.centerX + radius, metrics.centerY + radius)
         }
-        if (borderWidth > 0) {
-            shaderPaint.shader = null
-            shaderPaint.color = if (strokeColor == 0) Color.WHITE else strokeColor
-            shaderPaint.strokeWidth = strokeWidth + borderWidth*2
-            canvas.drawArc(innerCircleArcReference, arcStartAngle, arcLength, false, shaderPaint)
-        }
+        innerCircleArcReference?.let {
+            if (borderWidth > 0) {
+                shaderPaint.shader = null
+                shaderPaint.color = if (strokeColor == 0) Color.WHITE else strokeColor
+                shaderPaint.strokeWidth = strokeWidth + borderWidth * 2
+                canvas.drawArc(it, arcStartAngle, arcLength, false, shaderPaint)
+            }
 
-        shaderPaint.strokeWidth = strokeWidth
-        shaderPaint.shader = getShader()
-        canvas.drawArc(innerCircleArcReference, arcStartAngle, arcLength, false, shaderPaint)
+            shaderPaint.strokeWidth = strokeWidth
+            shaderPaint.shader = getShader()
+            canvas.drawArc(it, arcStartAngle, arcLength, false, shaderPaint)
+        }
     }
 
 

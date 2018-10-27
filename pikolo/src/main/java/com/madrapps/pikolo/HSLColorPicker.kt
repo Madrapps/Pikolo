@@ -139,11 +139,14 @@ open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Att
     }
 
 
-    override fun onSaveInstanceState(): Parcelable {
+    override fun onSaveInstanceState(): Parcelable? {
         val bundle = super.onSaveInstanceState()
-        val savedState = SavedState(bundle)
-        savedState.color = ColorUtils.HSLToColor(metrics.hsl)
-        return savedState
+        if (bundle != null) {
+            return SavedState(bundle).apply {
+                color = ColorUtils.HSLToColor(metrics.hsl)
+            }
+        }
+        return null
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {
@@ -165,7 +168,8 @@ open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Att
         }
 
         companion object {
-            @JvmField val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
+            @JvmField
+            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
                 override fun createFromParcel(source: Parcel): SavedState = SavedState(source)
                 override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
             }
