@@ -7,7 +7,7 @@ import com.madrapps.pikolo.Paints
 
 internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorComponent(metrics, paints) {
 
-    abstract val NO_OF_COLORS: Int
+    abstract val noOfColors: Int
     internal abstract val colors: IntArray
     internal abstract val colorPosition: FloatArray
 
@@ -24,7 +24,7 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
      */
     abstract val range: Float
 
-    val arcEndAngle: Float
+    private val arcEndAngle: Float
         get() {
             val end = arcStartAngle + arcLength
             return if (end > 360f) end - 360f else end
@@ -115,16 +115,16 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
     }
 
     internal open fun getColorArray(hsl: FloatArray): IntArray {
-        for (i in 0 until NO_OF_COLORS) {
-            hsl[hslIndex] = i.toFloat() / (NO_OF_COLORS - 1)
+        for (i in 0 until noOfColors) {
+            hsl[hslIndex] = i.toFloat() / (noOfColors - 1)
             colors[i] = ColorUtils.HSLToColor(hsl)
         }
         return colors
     }
 
     private fun getColorPositionArray(): FloatArray {
-        for (i in 0 until NO_OF_COLORS) {
-            colorPosition[i] = i * (arcLength / (NO_OF_COLORS - 1)) / 360f
+        for (i in 0 until noOfColors) {
+            colorPosition[i] = i * (arcLength / (noOfColors - 1)) / 360f
         }
         return colorPosition
     }
