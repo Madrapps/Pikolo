@@ -27,9 +27,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = findViewById(R.id.imageView);
 
-        colorPicker = (HSLColorPicker) findViewById(R.id.colorPicker);
+        colorPicker = findViewById(R.id.colorPicker);
         colorPicker.setColorSelectionListener(new SimpleColorSelectionListener() {
             @Override
             public void onColorSelected(int color) {
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initializeColorButtons();
 
-        randomColorButton = (Button) findViewById(R.id.randomColorButton);
+        randomColorButton = findViewById(R.id.randomColorButton);
         randomColorButton.setOnClickListener(this);
     }
 
