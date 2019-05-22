@@ -107,7 +107,7 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
             getColorPositionArray()
             shader = SweepGradient(centerX, centerY, colors, colorPosition)
             // We need a margin of rotation due to the Paint.Cap.Round
-            matrix.setRotate(arcStartAngle - (strokeWidth / 3f / metrics.density), centerX, centerY)
+            matrix.setRotate(arcStartAngle - (strokeWidth / 3f / density), centerX, centerY)
             shader.setLocalMatrix(matrix)
         }
 
