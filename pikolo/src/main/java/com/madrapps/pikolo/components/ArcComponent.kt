@@ -1,7 +1,7 @@
 package com.madrapps.pikolo.components
 
 import android.graphics.*
-import android.support.v4.graphics.ColorUtils
+import androidx.core.graphics.ColorUtils
 import com.madrapps.pikolo.Metrics
 import com.madrapps.pikolo.Paints
 
