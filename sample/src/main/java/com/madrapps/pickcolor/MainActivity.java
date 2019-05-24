@@ -3,21 +3,22 @@ package com.madrapps.pickcolor;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.core.graphics.ColorUtils;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.madrapps.pikolo.HSLColorPicker;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.ColorUtils;
+
+import com.madrapps.pikolo.RGBColorPicker;
 import com.madrapps.pikolo.listeners.SimpleColorSelectionListener;
 
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private HSLColorPicker colorPicker;
+    private RGBColorPicker colorPicker;
     private ImageView imageView;
     private Button randomColorButton;
 
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.randomColorButton){
+        if (v.getId() == R.id.randomColorButton) {
             final int color = ColorUtils.HSLToColor(new float[]{random.nextInt(360), random.nextFloat(), random.nextFloat()});
             final String hexColor = String.format("#%06X", (0xFFFFFF & color));
             randomColorButton.setText(hexColor);
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             imageView.getBackground().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
             colorPicker.setColor(color);
         }
-        if(v instanceof ImageButton){
+        if (v instanceof ImageButton) {
             final int color = ((ColorDrawable) ((ImageButton) v).getDrawable()).getColor();
             imageView.getBackground().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
             colorPicker.setColor(color);
