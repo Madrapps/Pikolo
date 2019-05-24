@@ -7,7 +7,6 @@ import android.view.MotionEvent
 import android.view.MotionEvent.*
 import com.madrapps.pikolo.Metrics
 import com.madrapps.pikolo.Paints
-import com.madrapps.pikolo.color
 import com.madrapps.pikolo.listeners.OnColorSelectionListener
 
 internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
@@ -40,11 +39,11 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
         when (event.action) {
             ACTION_DOWN -> {
                 if (PointF(x, y) in this) {
-                    colorSelectionListener?.onColorSelectionStart(metrics.color())
+                    colorSelectionListener?.onColorSelectionStart(metrics.getColor())
                     isTouched = true
                     calculateAngle(x, y)
                     updateComponent(angle)
-                    colorSelectionListener?.onColorSelected(metrics.color())
+                    colorSelectionListener?.onColorSelected(metrics.getColor())
                 }
             }
 
@@ -52,12 +51,12 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
                 if (isTouched) {
                     calculateAngle(x, y)
                     updateComponent(angle)
-                    colorSelectionListener?.onColorSelected(metrics.color())
+                    colorSelectionListener?.onColorSelected(metrics.getColor())
                 }
             }
 
             ACTION_UP -> {
-                if (isTouched) colorSelectionListener?.onColorSelectionEnd(metrics.color())
+                if (isTouched) colorSelectionListener?.onColorSelectionEnd(metrics.getColor())
                 isTouched = false
             }
         }

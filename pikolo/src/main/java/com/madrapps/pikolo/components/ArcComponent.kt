@@ -74,7 +74,7 @@ internal abstract class ArcComponent(
         val indicatorPaint = paints.indicatorPaint
         indicatorPaint.style = FILL
 
-        val color = ColorUtils.HSLToColor(metrics.hsl)
+        val color = metrics.getColor()
         indicatorPaint.color = color
         canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
 
@@ -90,7 +90,7 @@ internal abstract class ArcComponent(
         if (indicatorStrokeColor != 0) {
             return indicatorStrokeColor
         }
-        borderColor[0] = metrics.hsl[0]
+        borderColor[0] = metrics.hue()
         val contrastW = ColorUtils.calculateContrast(color, WHITE)
         val contrastB = ColorUtils.calculateContrast(color, BLACK)
         val contrastDifference = contrastB - contrastW
@@ -112,7 +112,7 @@ internal abstract class ArcComponent(
 
     override fun getShader(): Shader {
         with(metrics) {
-            getColorArray(hsl.copyOf())
+            getColorArray(color.copyOf())
             getColorPositionArray()
             shader = SweepGradient(centerX, centerY, colors, colorPosition)
             // We need a margin of rotation due to the Paint.Cap.Round
@@ -123,7 +123,7 @@ internal abstract class ArcComponent(
         return shader
     }
 
-    internal abstract fun getColorArray(hsl: FloatArray): IntArray
+    internal abstract fun getColorArray(color: FloatArray): IntArray
 
     private fun getColorPositionArray(): FloatArray {
         for (i in 0 until noOfColors) {

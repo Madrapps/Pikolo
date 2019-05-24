@@ -10,15 +10,16 @@ import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import com.madrapps.pikolo.components.ColorComponent
-import com.madrapps.pikolo.components.HueComponent
-import com.madrapps.pikolo.components.LightnessComponent
-import com.madrapps.pikolo.components.SaturationComponent
+import com.madrapps.pikolo.components.hsl.HslMetrics
+import com.madrapps.pikolo.components.hsl.HueComponent
+import com.madrapps.pikolo.components.hsl.LightnessComponent
+import com.madrapps.pikolo.components.hsl.SaturationComponent
 import com.madrapps.pikolo.listeners.OnColorSelectionListener
 
 
 open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
-    private val metrics = Metrics(density = resources.displayMetrics.density)
+    private val metrics = HslMetrics(color = floatArrayOf(0f, 1f, 0.5f), density = resources.displayMetrics.density)
     private val paints = Paints()
 
     private val hueComponent: ColorComponent
@@ -126,10 +127,10 @@ open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Att
 
     open fun setColor(color: Int) {
         with(metrics) {
-            ColorUtils.colorToHSL(color, hsl)
-            hueComponent.updateAngle(hsl[0])
-            saturationComponent.updateAngle(hsl[1])
-            lightnessComponent.updateAngle(hsl[2])
+            ColorUtils.colorToHSL(color, this.color)
+            hueComponent.updateAngle(this.color[0])
+            saturationComponent.updateAngle(this.color[1])
+            lightnessComponent.updateAngle(this.color[2])
         }
         invalidate()
     }
@@ -143,7 +144,7 @@ open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Att
         val bundle = super.onSaveInstanceState()
         if (bundle != null) {
             return SavedState(bundle).apply {
-                color = ColorUtils.HSLToColor(metrics.hsl)
+                color = ColorUtils.HSLToColor(metrics.color)
             }
         }
         return null

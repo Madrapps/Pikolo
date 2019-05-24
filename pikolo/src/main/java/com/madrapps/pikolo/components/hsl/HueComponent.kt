@@ -1,30 +1,31 @@
-package com.madrapps.pikolo.components
+package com.madrapps.pikolo.components.hsl
 
 import android.support.v4.graphics.ColorUtils
 import com.madrapps.pikolo.Metrics
 import com.madrapps.pikolo.Paints
+import com.madrapps.pikolo.components.ArcComponent
 
 internal class HueComponent(metrics: Metrics, paints: Paints, arcLength: Float, arcStartAngle: Float) : ArcComponent(metrics, paints, arcLength, arcStartAngle) {
 
-    val hslIndex: Int = 0
+    private val hslIndex: Int = 0
     override val range: Float = 360f
     override val noOfColors = 360
     override val colors = IntArray(noOfColors)
     override val colorPosition = FloatArray(noOfColors)
 
-    override fun getColorArray(hsl: FloatArray): IntArray {
-        hsl[1] = 1f
-        hsl[2] = 0.5f
+    override fun getColorArray(color: FloatArray): IntArray {
+        color[1] = 1f
+        color[2] = 0.5f
         for (i in 0 until noOfColors) {
-            hsl[hslIndex] = i.toFloat()
-            colors[i] = ColorUtils.HSLToColor(hsl)
+            color[hslIndex] = i.toFloat()
+            colors[i] = ColorUtils.HSLToColor(color)
         }
         return colors
     }
 
     override fun updateComponent(angle: Double): Float {
         val component =  super.updateComponent(angle)
-        metrics.hsl[hslIndex] = component
+        metrics.color[hslIndex] = component
         return component
     }
 }
