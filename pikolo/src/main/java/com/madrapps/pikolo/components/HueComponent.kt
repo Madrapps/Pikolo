@@ -6,8 +6,8 @@ import com.madrapps.pikolo.Paints
 
 internal class HueComponent(metrics: Metrics, paints: Paints, arcLength: Float, arcStartAngle: Float) : ArcComponent(metrics, paints, arcLength, arcStartAngle) {
 
+    val hslIndex: Int = 0
     override val range: Float = 360f
-    override val hslIndex: Int = 0
     override val noOfColors = 360
     override val colors = IntArray(noOfColors)
     override val colorPosition = FloatArray(noOfColors)
@@ -22,4 +22,9 @@ internal class HueComponent(metrics: Metrics, paints: Paints, arcLength: Float, 
         return colors
     }
 
+    override fun updateComponent(angle: Double): Float {
+        val component =  super.updateComponent(angle)
+        metrics.hsl[hslIndex] = component
+        return component
+    }
 }

@@ -25,7 +25,6 @@ internal abstract class ArcComponent(
     private var innerCircleArcReference: RectF? = null
     private val borderColor = floatArrayOf(0f, 0.8f, 1f)
 
-    abstract val hslIndex: Int
     /**
      * This is the max value of the component. For now the min value is taken as 0
      */
@@ -124,13 +123,7 @@ internal abstract class ArcComponent(
         return shader
     }
 
-    internal open fun getColorArray(hsl: FloatArray): IntArray {
-        for (i in 0 until noOfColors) {
-            hsl[hslIndex] = i.toFloat() / (noOfColors - 1)
-            colors[i] = ColorUtils.HSLToColor(hsl)
-        }
-        return colors
-    }
+    internal abstract fun getColorArray(hsl: FloatArray): IntArray
 
     private fun getColorPositionArray(): FloatArray {
         for (i in 0 until noOfColors) {
@@ -189,7 +182,7 @@ internal abstract class ArcComponent(
         }
     }
 
-    override fun updateComponent(angle: Double) {
+    override fun updateComponent(angle: Double): Float {
         var relativeAngle = angle
         if (angle < arcStartAngle) {
             relativeAngle += 360f
@@ -198,7 +191,7 @@ internal abstract class ArcComponent(
         val baseAngle = relativeAngle - arcStartAngle
         val component = (baseAngle / arcLength) * range
 
-        metrics.hsl[hslIndex] = component.toFloat()
+        return component.toFloat()
     }
 
     override fun updateAngle(component: Float) {
