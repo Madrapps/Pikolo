@@ -56,22 +56,22 @@ open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Att
 
         hueComponent = HueComponent(metrics, paints, hueArcLength, hueStartAngle)
 
-        hueComponent.strokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_hue_arc_width, globalArcWidth)
-        hueComponent.borderWidth = typedArray.getDimension(R.styleable.HSLColorPicker_hue_stroke_width, globalStrokeWidth)
+        hueComponent.fillWidth = typedArray.getDimension(R.styleable.HSLColorPicker_hue_arc_width, globalArcWidth)
+        hueComponent.strokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_hue_stroke_width, globalStrokeWidth)
         hueComponent.indicatorStrokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_hue_indicator_stroke_width, globalIndicatorStrokeWidth)
         hueComponent.indicatorStrokeColor = typedArray.getColor(R.styleable.HSLColorPicker_hue_indicator_stroke_color, globalIndicatorStrokeColor)
         hueComponent.strokeColor = typedArray.getColor(R.styleable.HSLColorPicker_hue_stroke_color, globalStrokeColor)
         hueComponent.indicatorRadius = typedArray.getDimension(R.styleable.HSLColorPicker_hue_indicator_radius, globalIndicatorRadius)
 
-        saturationComponent.strokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_saturation_arc_width, globalArcWidth)
-        saturationComponent.borderWidth = typedArray.getDimension(R.styleable.HSLColorPicker_saturation_stroke_width, globalStrokeWidth)
+        saturationComponent.fillWidth = typedArray.getDimension(R.styleable.HSLColorPicker_saturation_arc_width, globalArcWidth)
+        saturationComponent.strokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_saturation_stroke_width, globalStrokeWidth)
         saturationComponent.indicatorStrokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_saturation_indicator_stroke_width, globalIndicatorStrokeWidth)
         saturationComponent.indicatorStrokeColor = typedArray.getColor(R.styleable.HSLColorPicker_saturation_indicator_stroke_color, globalIndicatorStrokeColor)
         saturationComponent.strokeColor = typedArray.getColor(R.styleable.HSLColorPicker_saturation_stroke_color, globalStrokeColor)
         saturationComponent.indicatorRadius = typedArray.getDimension(R.styleable.HSLColorPicker_saturation_indicator_radius, globalIndicatorRadius)
 
-        lightnessComponent.strokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_lightness_arc_width, globalArcWidth)
-        lightnessComponent.borderWidth = typedArray.getDimension(R.styleable.HSLColorPicker_lightness_stroke_width, globalStrokeWidth)
+        lightnessComponent.fillWidth = typedArray.getDimension(R.styleable.HSLColorPicker_lightness_arc_width, globalArcWidth)
+        lightnessComponent.strokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_lightness_stroke_width, globalStrokeWidth)
         lightnessComponent.indicatorStrokeWidth = typedArray.getDimension(R.styleable.HSLColorPicker_lightness_indicator_stroke_width, globalIndicatorStrokeWidth)
         lightnessComponent.indicatorStrokeColor = typedArray.getColor(R.styleable.HSLColorPicker_lightness_indicator_stroke_color, globalIndicatorStrokeColor)
         lightnessComponent.strokeColor = typedArray.getColor(R.styleable.HSLColorPicker_lightness_stroke_color, globalStrokeColor)

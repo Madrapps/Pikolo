@@ -13,12 +13,15 @@ import com.madrapps.pikolo.listeners.OnColorSelectionListener
 internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
 
     var radius: Float = 0f
+
+    var fillWidth: Float = 0f
     var strokeWidth: Float = 0f
     var strokeColor: Int = 0
-    var borderWidth: Float = 0f
+
     var indicatorRadius: Float = 0f
     var indicatorStrokeWidth: Float = 0f
     var indicatorStrokeColor: Int = 0
+
     var indicatorX: Float = 0f
     var indicatorY: Float = 0f
 
@@ -87,6 +90,6 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
     }
 
     internal fun setRadius(outerRadius: Float, offset: Float) {
-        radius = outerRadius - (Math.max(indicatorRadius + indicatorStrokeWidth, strokeWidth)) - offset
+        radius = outerRadius - (Math.max(indicatorRadius + indicatorStrokeWidth, fillWidth)) - offset
     }
 }
