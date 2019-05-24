@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:pikolo="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#bbdefb"
-    tools:context="com.madrapps.pickcolor.MainActivity"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="81dp">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:pikolo="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   android:background="#bbdefb"
+                                                   tools:context="com.madrapps.pickcolor.MainActivity"
+                                                   tools:layout_editor_absoluteX="0dp"
+                                                   tools:layout_editor_absoluteY="81dp">
 
     <com.madrapps.pikolo.HSLColorPicker
         android:id="@+id/colorPicker"
@@ -119,4 +119,4 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="HardcodedText" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.os.Parcel
 import android.os.Parcelable
-import android.support.v4.graphics.ColorUtils
+import androidx.core.graphics.ColorUtils
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
