@@ -5,7 +5,7 @@ import android.graphics.Color.*
 import android.graphics.Paint.Cap.ROUND
 import android.graphics.Paint.Style.FILL
 import android.graphics.Paint.Style.STROKE
-import android.support.v4.graphics.ColorUtils
+import androidx.core.graphics.ColorUtils
 import com.madrapps.pikolo.Metrics
 import com.madrapps.pikolo.Paints
 

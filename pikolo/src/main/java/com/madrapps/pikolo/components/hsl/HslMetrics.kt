@@ -1,6 +1,6 @@
 package com.madrapps.pikolo.components.hsl
 
-import android.support.v4.graphics.ColorUtils
+import androidx.core.graphics.ColorUtils
 import com.madrapps.pikolo.Metrics
 
 internal class HslMetrics(centerX: Float = 0f, centerY: Float = 0f, color: FloatArray, density: Float) : Metrics(centerX, centerY, color, density) {

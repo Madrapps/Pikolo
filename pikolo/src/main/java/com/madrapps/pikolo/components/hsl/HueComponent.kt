@@ -1,6 +1,6 @@
 package com.madrapps.pikolo.components.hsl
 
-import android.support.v4.graphics.ColorUtils
+import androidx.core.graphics.ColorUtils
 import com.madrapps.pikolo.Metrics
 import com.madrapps.pikolo.Paints
 import com.madrapps.pikolo.components.ArcComponent
