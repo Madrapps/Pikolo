@@ -7,18 +7,20 @@ import android.view.MotionEvent
 import android.view.MotionEvent.*
 import com.madrapps.pikolo.Metrics
 import com.madrapps.pikolo.Paints
-import com.madrapps.pikolo.color
 import com.madrapps.pikolo.listeners.OnColorSelectionListener
 
 internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints) {
 
     var radius: Float = 0f
+
+    var fillWidth: Float = 0f
     var strokeWidth: Float = 0f
     var strokeColor: Int = 0
-    var borderWidth: Float = 0f
+
     var indicatorRadius: Float = 0f
     var indicatorStrokeWidth: Float = 0f
     var indicatorStrokeColor: Int = 0
+
     var indicatorX: Float = 0f
     var indicatorY: Float = 0f
 
@@ -37,11 +39,11 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
         when (event.action) {
             ACTION_DOWN -> {
                 if (PointF(x, y) in this) {
-                    colorSelectionListener?.onColorSelectionStart(metrics.color())
+                    colorSelectionListener?.onColorSelectionStart(metrics.getColor())
                     isTouched = true
                     calculateAngle(x, y)
                     updateComponent(angle)
-                    colorSelectionListener?.onColorSelected(metrics.color())
+                    colorSelectionListener?.onColorSelected(metrics.getColor())
                 }
             }
 
@@ -49,12 +51,12 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
                 if (isTouched) {
                     calculateAngle(x, y)
                     updateComponent(angle)
-                    colorSelectionListener?.onColorSelected(metrics.color())
+                    colorSelectionListener?.onColorSelected(metrics.getColor())
                 }
             }
 
             ACTION_UP -> {
-                if (isTouched) colorSelectionListener?.onColorSelectionEnd(metrics.color())
+                if (isTouched) colorSelectionListener?.onColorSelectionEnd(metrics.getColor())
                 isTouched = false
             }
         }
@@ -87,6 +89,6 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
     }
 
     internal fun setRadius(outerRadius: Float, offset: Float) {
-        radius = outerRadius - (Math.max(indicatorRadius + indicatorStrokeWidth, strokeWidth)) - offset
+        radius = outerRadius - (Math.max(indicatorRadius + indicatorStrokeWidth, fillWidth)) - offset
     }
 }

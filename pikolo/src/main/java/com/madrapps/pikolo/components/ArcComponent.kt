@@ -1,12 +1,22 @@
 package com.madrapps.pikolo.components
 
 import android.graphics.*
-import android.support.v4.graphics.ColorUtils
+import android.graphics.Color.*
+import android.graphics.Paint.Cap.ROUND
+import android.graphics.Paint.Style.FILL
+import android.graphics.Paint.Style.STROKE
+import androidx.core.graphics.ColorUtils
 import com.madrapps.pikolo.Metrics
 import com.madrapps.pikolo.Paints
 
-internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorComponent(metrics, paints) {
+internal abstract class ArcComponent(
+        metrics: Metrics,
+        paints: Paints,
+        private val arcLength: Float,
+        private val arcStartAngle: Float
+) : ColorComponent(metrics, paints) {
 
+    protected abstract val componentIndex: Int
     abstract val noOfColors: Int
     internal abstract val colors: IntArray
     internal abstract val colorPosition: FloatArray
@@ -16,9 +26,6 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
     private var innerCircleArcReference: RectF? = null
     private val borderColor = floatArrayOf(0f, 0.8f, 1f)
 
-    abstract val hslIndex: Int
-    abstract val arcLength: Float
-    abstract val arcStartAngle: Float
     /**
      * This is the max value of the component. For now the min value is taken as 0
      */
@@ -30,6 +37,10 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
             return if (end > 360f) end - 360f else end
         }
 
+    init {
+        angle = (arcStartAngle + arcLength / 2f).toDouble()
+    }
+
     override fun drawComponent(canvas: Canvas) {
         drawArc(canvas)
         drawIndicator(canvas)
@@ -37,41 +48,40 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
 
     internal open fun drawArc(canvas: Canvas) {
         val shaderPaint = paints.shaderPaint
-        shaderPaint.style = Paint.Style.STROKE
-        shaderPaint.strokeCap = Paint.Cap.ROUND
+        shaderPaint.style = STROKE
+        shaderPaint.strokeCap = ROUND
 
         if (innerCircleArcReference == null) {
             innerCircleArcReference = RectF(metrics.centerX - radius, metrics.centerY - radius, metrics.centerX + radius, metrics.centerY + radius)
         }
         innerCircleArcReference?.let {
-            if (borderWidth > 0) {
+            if (strokeWidth > 0) {
                 shaderPaint.shader = null
-                shaderPaint.color = if (strokeColor == 0) Color.WHITE else strokeColor
-                shaderPaint.strokeWidth = strokeWidth + borderWidth * 2
+                shaderPaint.color = if (strokeColor == 0) WHITE else strokeColor
+                shaderPaint.strokeWidth = fillWidth + strokeWidth * 2
                 canvas.drawArc(it, arcStartAngle, arcLength, false, shaderPaint)
             }
 
-            shaderPaint.strokeWidth = strokeWidth
+            shaderPaint.strokeWidth = fillWidth
             shaderPaint.shader = getShader()
             canvas.drawArc(it, arcStartAngle, arcLength, false, shaderPaint)
         }
     }
-
 
     internal open fun drawIndicator(canvas: Canvas) {
         indicatorX = (metrics.centerX + radius * Math.cos(Math.toRadians(angle))).toFloat()
         indicatorY = (metrics.centerY + radius * Math.sin(Math.toRadians(angle))).toFloat()
 
         val indicatorPaint = paints.indicatorPaint
-        indicatorPaint.style = Paint.Style.FILL
+        indicatorPaint.style = FILL
 
-        val color = ColorUtils.HSLToColor(metrics.hsl)
+        val color = metrics.getColor()
         indicatorPaint.color = color
         canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
 
         if (indicatorStrokeWidth > 0) {
             indicatorPaint.color = getBorderColor(color)
-            indicatorPaint.style = Paint.Style.STROKE
+            indicatorPaint.style = STROKE
             indicatorPaint.strokeWidth = indicatorStrokeWidth
             canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
         }
@@ -81,9 +91,9 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
         if (indicatorStrokeColor != 0) {
             return indicatorStrokeColor
         }
-        borderColor[0] = metrics.hsl[0]
-        val contrastW = ColorUtils.calculateContrast(color, Color.WHITE)
-        val contrastB = ColorUtils.calculateContrast(color, Color.BLACK)
+        borderColor[0] = metrics.hue()
+        val contrastW = ColorUtils.calculateContrast(color, WHITE)
+        val contrastB = ColorUtils.calculateContrast(color, BLACK)
         val contrastDifference = contrastB - contrastW
         borderColor[2] = when {
             contrastDifference > 16 -> 0f
@@ -103,24 +113,18 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
 
     override fun getShader(): Shader {
         with(metrics) {
-            getColorArray(hsl.copyOf())
+            getColorArray(color.copyOf())
             getColorPositionArray()
             shader = SweepGradient(centerX, centerY, colors, colorPosition)
             // We need a margin of rotation due to the Paint.Cap.Round
-            matrix.setRotate(arcStartAngle - (strokeWidth / 3f / density), centerX, centerY)
+            matrix.setRotate(arcStartAngle - (fillWidth / 3f / density), centerX, centerY)
             shader.setLocalMatrix(matrix)
         }
 
         return shader
     }
 
-    internal open fun getColorArray(hsl: FloatArray): IntArray {
-        for (i in 0 until noOfColors) {
-            hsl[hslIndex] = i.toFloat() / (noOfColors - 1)
-            colors[i] = ColorUtils.HSLToColor(hsl)
-        }
-        return colors
-    }
+    internal abstract fun getColorArray(color: FloatArray): IntArray
 
     private fun getColorPositionArray(): FloatArray {
         for (i in 0 until noOfColors) {
@@ -188,7 +192,7 @@ internal abstract class ArcComponent(metrics: Metrics, paints: Paints) : ColorCo
         val baseAngle = relativeAngle - arcStartAngle
         val component = (baseAngle / arcLength) * range
 
-        metrics.hsl[hslIndex] = component.toFloat()
+        metrics.color[componentIndex] = component.toFloat()
     }
 
     override fun updateAngle(component: Float) {
