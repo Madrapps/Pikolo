@@ -16,6 +16,7 @@ internal abstract class ArcComponent(
         private val arcStartAngle: Float
 ) : ColorComponent(metrics, paints) {
 
+    protected abstract val componentIndex: Int
     abstract val noOfColors: Int
     internal abstract val colors: IntArray
     internal abstract val colorPosition: FloatArray
@@ -182,7 +183,7 @@ internal abstract class ArcComponent(
         }
     }
 
-    override fun updateComponent(angle: Double): Float {
+    override fun updateComponent(angle: Double) {
         var relativeAngle = angle
         if (angle < arcStartAngle) {
             relativeAngle += 360f
@@ -191,7 +192,7 @@ internal abstract class ArcComponent(
         val baseAngle = relativeAngle - arcStartAngle
         val component = (baseAngle / arcLength) * range
 
-        return component.toFloat()
+        metrics.color[componentIndex] = component.toFloat()
     }
 
     override fun updateAngle(component: Float) {

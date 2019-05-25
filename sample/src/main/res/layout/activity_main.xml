@@ -44,7 +44,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        pikolo:blue_indicator_stroke_width="10dp"
+        pikolo:blue_indicator_stroke_width="0dp"
         pikolo:arc_length="110"
         pikolo:red_start_angle="30"
         pikolo:blue_start_angle="270"

@@ -7,7 +7,7 @@ import com.madrapps.pikolo.components.ArcComponent
 
 internal class GreenComponent(metrics: Metrics, paints: Paints, arcLength: Float, arcStartAngle: Float) : ArcComponent(metrics, paints, arcLength, arcStartAngle) {
 
-    private val index: Int = 1
+    override val componentIndex: Int = 1
     override val range: Float = 255f
     override val noOfColors = 2
     override val colors = IntArray(noOfColors)
@@ -17,11 +17,5 @@ internal class GreenComponent(metrics: Metrics, paints: Paints, arcLength: Float
         colors[0] = Color.BLACK
         colors[1] = Color.rgb(0, 255, 0)
         return colors
-    }
-
-    override fun updateComponent(angle: Double): Float {
-        val component = super.updateComponent(angle)
-        metrics.color[index] = component
-        return component
     }
 }

@@ -80,7 +80,7 @@ internal abstract class ColorComponent(val metrics: Metrics, val paints: Paints)
         }
     }
 
-    abstract fun updateComponent(angle: Double): Float
+    abstract fun updateComponent(angle: Double)
 
     abstract fun updateAngle(component: Float)
 
