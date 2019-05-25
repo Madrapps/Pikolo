@@ -10,7 +10,30 @@
                                                    tools:layout_editor_absoluteX="0dp"
                                                    tools:layout_editor_absoluteY="81dp">
 
-    <com.madrapps.pikolo.HSLColorPicker
+    <!--<com.madrapps.pikolo.HSLColorPicker-->
+        <!--android:id="@+id/colorPicker"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:padding="0dp"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/randomColorButton"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--pikolo:lightness_indicator_stroke_width="0dp"-->
+        <!--pikolo:arc_length="110"-->
+        <!--pikolo:hue_start_angle="30"-->
+        <!--pikolo:lightness_start_angle="270"-->
+        <!--pikolo:radius_offset="20dp"-->
+        <!--pikolo:saturation_indicator_stroke_color="@color/colorPrimary"-->
+        <!--pikolo:saturation_start_angle="150"-->
+        <!--tools:layout_constraintBottom_creator="1"-->
+        <!--tools:layout_constraintLeft_creator="1"-->
+        <!--tools:layout_constraintRight_creator="1"-->
+        <!--tools:layout_constraintTop_creator="1" />-->
+
+    <com.madrapps.pikolo.RGBColorPicker
         android:id="@+id/colorPicker"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -21,13 +44,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:lightness_indicator_stroke_width="0dp"
+        pikolo:blue_indicator_stroke_width="0dp"
         pikolo:arc_length="110"
-        pikolo:hue_start_angle="30"
-        pikolo:lightness_start_angle="270"
+        pikolo:red_start_angle="30"
+        pikolo:blue_start_angle="270"
         pikolo:radius_offset="20dp"
-        pikolo:saturation_indicator_stroke_color="@color/colorPrimary"
-        pikolo:saturation_start_angle="150"
+        pikolo:green_indicator_stroke_color="@color/colorPrimary"
+        pikolo:green_start_angle="150"
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
