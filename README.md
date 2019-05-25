@@ -4,8 +4,10 @@
 
 An android color picker library
 
-<img src="/preview/arc-selectors.gif" alt="preview" title="preview" width="200" height="200" align="right" vspace="40" />
-<img src="/preview/preview-full.gif" alt="preview" title="preview" width="200" height="200" align="right" vspace="40" />
+<img src="/preview/arc-selectors.gif" alt="preview" title="preview" width="200" height="200"/><img src="/preview/preview-full.gif" alt="preview" title="preview" width="200" height="200"/><img src="/preview/rgb-picker.gif" alt="preview" title="preview" width="200" height="200"/>
+
+<br/>
+<br/>
 
 Download
 -----
@@ -16,16 +18,21 @@ repositories {
 }
 
 dependencies {
-  compile 'com.github.madrapps:pikolo:1.1.6'
+  implementation 'com.github.madrapps:pikolo:2.0.0'
 }
 ```
 
+Features
+-----
+- Includes `HSLColorPicker` and `RGBColorPicker`
+- Full customization of the various parts of the color picker (like arc length, arc position, indicator size, color, etc...) using XML attributes
+
 Usage
 -----
-Add the `HSLColorPicker` view to your layout and use it in code as below:
+Add the `HSLColorPicker` or `RGBColorPicker` view to your layout and use it in code as below:
 
 ```java
-final HSLColorPicker colorPicker = (HSLColorPicker) findViewById(R.id.colorPicker);
+final ColorPicker colorPicker = findViewById(R.id.colorPicker);
 colorPicker.setColorSelectionListener(new SimpleColorSelectionListener() {
   @Override
   public void onColorSelected(int color) {
