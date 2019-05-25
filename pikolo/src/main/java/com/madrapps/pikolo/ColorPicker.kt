@@ -12,6 +12,7 @@ import com.madrapps.pikolo.listeners.OnColorSelectionListener
 abstract class ColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
     protected val paints = Paints()
+    protected val config: Config
 
     internal abstract val color: Int
 
@@ -19,6 +20,24 @@ abstract class ColorPicker @JvmOverloads constructor(context: Context, attrs: At
     abstract override fun onSizeChanged(width: Int, height: Int, oldW: Int, oldH: Int)
     abstract fun setColorSelectionListener(listener: OnColorSelectionListener)
     abstract fun setColor(color: Int)
+
+    init {
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorPicker, defStyleAttr, 0)
+
+        val arcWidth = typedArray.getDimension(R.styleable.ColorPicker_arc_width, dp(5f))
+        val strokeWidth = typedArray.getDimension(R.styleable.ColorPicker_stroke_width, 0f)
+        val indicatorRadius = typedArray.getDimension(R.styleable.ColorPicker_indicator_radius, dp(15f))
+        val indicatorStrokeWidth = typedArray.getDimension(R.styleable.ColorPicker_indicator_stroke_width, dp(2f))
+        val strokeColor = typedArray.getColor(R.styleable.ColorPicker_stroke_color, 0)
+        val indicatorStrokeColor = typedArray.getColor(R.styleable.ColorPicker_indicator_stroke_color, 0)
+        val arcLength = typedArray.getFloat(R.styleable.ColorPicker_arc_length, 0f)
+        val radiusOffset = typedArray.getDimension(R.styleable.ColorPicker_radius_offset, 0f)
+
+        typedArray.recycle()
+
+        config = Config(arcWidth, strokeWidth, indicatorRadius, indicatorStrokeWidth,
+                strokeColor, indicatorStrokeColor, arcLength, radiusOffset)
+    }
 
     protected fun dp(value: Float): Float {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, resources.displayMetrics)
@@ -67,4 +86,13 @@ abstract class ColorPicker @JvmOverloads constructor(context: Context, attrs: At
             dest.writeInt(color)
         }
     }
+
+    data class Config(val arcWidth: Float,
+                      val strokeWidth: Float,
+                      val indicatorRadius: Float,
+                      val indicatorStrokeWidth: Float,
+                      val strokeColor: Int,
+                      val indicatorStrokeColor: Int,
+                      val arcLength: Float,
+                      val radiusOffset: Float)
 }

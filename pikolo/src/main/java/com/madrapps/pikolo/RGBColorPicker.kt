@@ -12,7 +12,6 @@ import com.madrapps.pikolo.components.rgb.RedComponent
 import com.madrapps.pikolo.components.rgb.RgbMetrics
 import com.madrapps.pikolo.listeners.OnColorSelectionListener
 
-
 open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ColorPicker(context, attrs, defStyleAttr) {
 
     private val metrics = RgbMetrics(color = floatArrayOf(255f, 0f, 0f), density = resources.displayMetrics.density)
@@ -29,55 +28,48 @@ open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: Att
         get() = metrics.getColor()
 
     init {
-        val globalArcWidth = dp(5f)
-        val globalStrokeWidth = 0f
-        val globalIndicatorRadius = dp(15f)
-        val globalIndicatorStrokeWidth = dp(2f)
-        val globalStrokeColor = 0
-        val globalIndicatorStrokeColor = 0
-        val globalArcLength = 110f
-        val globalRadiusOffset = 20f
+        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.RGBColorPicker, defStyleAttr, 0)
 
-        val redArcLength = if (globalArcLength == 0f) 360f else globalArcLength
-        val redStartAngle = 30f
+        with(config) {
+            val redArcLength = typedArray.getFloat(R.styleable.RGBColorPicker_red_arc_length, if (arcLength == 0f) 110f else arcLength)
+            val redStartAngle = typedArray.getFloat(R.styleable.RGBColorPicker_red_start_angle, 30f)
+            redComponent = RedComponent(metrics, paints, redArcLength, redStartAngle).also {
+                it.fillWidth = typedArray.getDimension(R.styleable.RGBColorPicker_red_arc_width, arcWidth)
+                it.strokeWidth = typedArray.getDimension(R.styleable.RGBColorPicker_red_stroke_width, strokeWidth)
+                it.indicatorStrokeWidth = typedArray.getDimension(R.styleable.RGBColorPicker_red_indicator_stroke_width, indicatorStrokeWidth)
+                it.indicatorStrokeColor = typedArray.getColor(R.styleable.RGBColorPicker_red_indicator_stroke_color, indicatorStrokeColor)
+                it.strokeColor = typedArray.getColor(R.styleable.RGBColorPicker_red_stroke_color, strokeColor)
+                it.indicatorRadius = typedArray.getDimension(R.styleable.RGBColorPicker_red_indicator_radius, indicatorRadius)
+            }
 
-        val greenArcLength = if (globalArcLength == 0f) 360f else globalArcLength
-        val greenStartAngle = 150f
+            val greenArcLength = typedArray.getFloat(R.styleable.RGBColorPicker_green_arc_length, if (arcLength == 0f) 110f else arcLength)
+            val greenStartAngle = typedArray.getFloat(R.styleable.RGBColorPicker_green_start_angle, 150f)
+            greenComponent = GreenComponent(metrics, paints, greenArcLength, greenStartAngle).also {
+                it.fillWidth = typedArray.getDimension(R.styleable.RGBColorPicker_green_arc_width, arcWidth)
+                it.strokeWidth = typedArray.getDimension(R.styleable.RGBColorPicker_green_stroke_width, strokeWidth)
+                it.indicatorStrokeWidth = typedArray.getDimension(R.styleable.RGBColorPicker_green_indicator_stroke_width, indicatorStrokeWidth)
+                it.indicatorStrokeColor = typedArray.getColor(R.styleable.RGBColorPicker_green_indicator_stroke_color, indicatorStrokeColor)
+                it.strokeColor = typedArray.getColor(R.styleable.RGBColorPicker_green_stroke_color, strokeColor)
+                it.indicatorRadius = typedArray.getDimension(R.styleable.RGBColorPicker_green_indicator_radius, indicatorRadius)
+            }
 
-        val blueArcLength = if (globalArcLength == 0f) 360f else globalArcLength
-        val blueStartAngle = 270f
+            val blueArcLength = typedArray.getFloat(R.styleable.RGBColorPicker_blue_arc_length, if (arcLength == 0f) 110f else arcLength)
+            val blueStartAngle = typedArray.getFloat(R.styleable.RGBColorPicker_blue_start_angle, 270f)
 
-        redComponent = RedComponent(metrics, paints, redArcLength, redStartAngle)
-        greenComponent = GreenComponent(metrics, paints, greenArcLength, greenStartAngle)
-        blueComponent = BlueComponent(metrics, paints, blueArcLength, blueStartAngle)
+            blueComponent = BlueComponent(metrics, paints, blueArcLength, blueStartAngle).also {
+                it.fillWidth = typedArray.getDimension(R.styleable.RGBColorPicker_blue_arc_width, arcWidth)
+                it.strokeWidth = typedArray.getDimension(R.styleable.RGBColorPicker_blue_stroke_width, config.strokeWidth)
+                it.indicatorStrokeWidth = typedArray.getDimension(R.styleable.RGBColorPicker_blue_indicator_stroke_width, indicatorStrokeWidth)
+                it.indicatorStrokeColor = typedArray.getColor(R.styleable.RGBColorPicker_blue_indicator_stroke_color, indicatorStrokeColor)
+                it.strokeColor = typedArray.getColor(R.styleable.RGBColorPicker_blue_stroke_color, strokeColor)
+                it.indicatorRadius = typedArray.getDimension(R.styleable.RGBColorPicker_blue_indicator_radius, indicatorRadius)
+            }
 
-        redComponent.fillWidth = globalArcWidth
-        redComponent.strokeWidth = globalStrokeWidth
-        redComponent.indicatorStrokeWidth = globalIndicatorStrokeWidth
-        redComponent.indicatorStrokeColor = globalIndicatorStrokeColor
-        redComponent.strokeColor = globalStrokeColor
-        redComponent.indicatorRadius = globalIndicatorRadius
-
-        redRadiusOffset = if (globalRadiusOffset == 0f) dp(1f) else globalRadiusOffset
-
-        greenComponent.fillWidth = globalArcWidth
-        greenComponent.strokeWidth = globalStrokeWidth
-        greenComponent.indicatorStrokeWidth = globalIndicatorStrokeWidth
-        greenComponent.indicatorStrokeColor = globalIndicatorStrokeColor
-        greenComponent.strokeColor = globalStrokeColor
-        greenComponent.indicatorRadius = globalIndicatorRadius
-
-        greenRadiusOffset = if (globalRadiusOffset == 0f) dp(1f) else globalRadiusOffset
-
-        blueComponent.fillWidth = globalArcWidth
-        blueComponent.strokeWidth = globalStrokeWidth
-        blueComponent.indicatorStrokeWidth = globalIndicatorStrokeWidth
-        blueComponent.indicatorStrokeColor = globalIndicatorStrokeColor
-        blueComponent.strokeColor = globalStrokeColor
-        blueComponent.indicatorRadius = globalIndicatorRadius
-
-        blueRadiusOffset = if (globalRadiusOffset == 0f) dp(1f) else globalRadiusOffset
-
+            redRadiusOffset = typedArray.getDimension(R.styleable.RGBColorPicker_red_radius_offset, if (radiusOffset == 0f) dp(25f) else radiusOffset)
+            greenRadiusOffset = typedArray.getDimension(R.styleable.RGBColorPicker_green_radius_offset, if (radiusOffset == 0f) dp(25f) else radiusOffset)
+            blueRadiusOffset = typedArray.getDimension(R.styleable.RGBColorPicker_blue_radius_offset, if (radiusOffset == 0f) dp(25f) else radiusOffset)
+        }
+        typedArray.recycle()
     }
 
     override fun onDraw(canvas: Canvas) {
