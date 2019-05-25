@@ -6,9 +6,6 @@ An android color picker library
 
 <img src="/preview/arc-selectors.gif" alt="preview" title="preview" width="200" height="200"/><img src="/preview/preview-full.gif" alt="preview" title="preview" width="200" height="200"/><img src="/preview/rgb-picker.gif" alt="preview" title="preview" width="200" height="200"/>
 
-<br/>
-<br/>
-
 Download
 -----
 
