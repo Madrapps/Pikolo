@@ -3,13 +3,8 @@ package com.madrapps.pikolo
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
-import android.os.Parcel
-import android.os.Parcelable
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.MotionEvent
-import android.view.View
-import androidx.core.graphics.ColorUtils
 import com.madrapps.pikolo.components.ColorComponent
 import com.madrapps.pikolo.components.rgb.BlueComponent
 import com.madrapps.pikolo.components.rgb.GreenComponent
@@ -18,10 +13,9 @@ import com.madrapps.pikolo.components.rgb.RgbMetrics
 import com.madrapps.pikolo.listeners.OnColorSelectionListener
 
 
-open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ColorPicker(context, attrs, defStyleAttr) {
 
     private val metrics = RgbMetrics(color = floatArrayOf(255f, 0f, 0f), density = resources.displayMetrics.density)
-    private val paints = Paints()
 
     private val redComponent: ColorComponent
     private val greenComponent: ColorComponent
@@ -31,8 +25,10 @@ open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: Att
     private val greenRadiusOffset: Float
     private val blueRadiusOffset: Float
 
-    init {
+    override val color: Int
+        get() = metrics.getColor()
 
+    init {
         val globalArcWidth = dp(5f)
         val globalStrokeWidth = 0f
         val globalIndicatorRadius = dp(15f)
@@ -118,13 +114,13 @@ open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: Att
         return isTouched
     }
 
-    fun setColorSelectionListener(listener: OnColorSelectionListener) {
+    override fun setColorSelectionListener(listener: OnColorSelectionListener) {
         redComponent.setColorSelectionListener(listener)
         greenComponent.setColorSelectionListener(listener)
         blueComponent.setColorSelectionListener(listener)
     }
 
-    open fun setColor(color: Int) {
+    override fun setColor(color: Int) {
         val red = Color.red(color).toFloat()
         metrics.color[0] = red
         redComponent.updateAngle(red)
@@ -137,54 +133,5 @@ open class RGBColorPicker @JvmOverloads constructor(context: Context, attrs: Att
         metrics.color[2] = blue
         blueComponent.updateAngle(blue)
         invalidate()
-    }
-
-    private fun dp(value: Float): Float {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, resources.displayMetrics)
-    }
-
-
-    override fun onSaveInstanceState(): Parcelable? {
-        val bundle = super.onSaveInstanceState()
-        if (bundle != null) {
-            return SavedState(bundle).apply {
-                color = ColorUtils.HSLToColor(metrics.color)
-            }
-        }
-        return null
-    }
-
-    override fun onRestoreInstanceState(state: Parcelable?) {
-        if (state is SavedState) {
-            super.onRestoreInstanceState(state.superState)
-            setColor(state.color)
-        } else {
-            super.onRestoreInstanceState(state)
-        }
-    }
-
-    internal class SavedState : BaseSavedState {
-        var color: Int = 0
-
-        constructor(bundle: Parcelable) : super(bundle)
-
-        private constructor(parcel: Parcel) : super(parcel) {
-            color = parcel.readInt()
-        }
-
-        companion object {
-            @JvmField
-            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
-                override fun createFromParcel(source: Parcel): SavedState = SavedState(source)
-                override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
-            }
-        }
-
-        override fun describeContents() = 0
-
-        override fun writeToParcel(dest: Parcel, flags: Int) {
-            super.writeToParcel(dest, flags)
-            dest.writeInt(color)
-        }
     }
 }

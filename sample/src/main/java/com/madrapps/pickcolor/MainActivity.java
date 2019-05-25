@@ -11,14 +11,14 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
 
-import com.madrapps.pikolo.RGBColorPicker;
+import com.madrapps.pikolo.ColorPicker;
 import com.madrapps.pikolo.listeners.SimpleColorSelectionListener;
 
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private RGBColorPicker colorPicker;
+    private ColorPicker colorPicker;
     private ImageView imageView;
     private Button randomColorButton;
 

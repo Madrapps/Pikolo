@@ -2,13 +2,9 @@ package com.madrapps.pikolo
 
 import android.content.Context
 import android.graphics.Canvas
-import android.os.Parcel
-import android.os.Parcelable
-import androidx.core.graphics.ColorUtils
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.MotionEvent
-import android.view.View
+import androidx.core.graphics.ColorUtils
 import com.madrapps.pikolo.components.ColorComponent
 import com.madrapps.pikolo.components.hsl.HslMetrics
 import com.madrapps.pikolo.components.hsl.HueComponent
@@ -17,10 +13,9 @@ import com.madrapps.pikolo.components.hsl.SaturationComponent
 import com.madrapps.pikolo.listeners.OnColorSelectionListener
 
 
-open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
+open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : ColorPicker(context, attrs, defStyleAttr) {
 
     private val metrics = HslMetrics(color = floatArrayOf(0f, 1f, 0.5f), density = resources.displayMetrics.density)
-    private val paints = Paints()
 
     private val hueComponent: ColorComponent
     private val saturationComponent: ColorComponent
@@ -29,6 +24,9 @@ open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Att
     private val hueRadiusOffset: Float
     private val saturationRadiusOffset: Float
     private val lightnessRadiusOffset: Float
+
+    override val color: Int
+        get() = metrics.getColor()
 
     init {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.HSLColorPicker, defStyleAttr, 0)
@@ -119,13 +117,13 @@ open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Att
         return isTouched
     }
 
-    fun setColorSelectionListener(listener: OnColorSelectionListener) {
+    override fun setColorSelectionListener(listener: OnColorSelectionListener) {
         hueComponent.setColorSelectionListener(listener)
         saturationComponent.setColorSelectionListener(listener)
         lightnessComponent.setColorSelectionListener(listener)
     }
 
-    open fun setColor(color: Int) {
+    override fun setColor(color: Int) {
         with(metrics) {
             ColorUtils.colorToHSL(color, this.color)
             hueComponent.updateAngle(this.color[0])
@@ -133,54 +131,5 @@ open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Att
             lightnessComponent.updateAngle(this.color[2])
         }
         invalidate()
-    }
-
-    private fun dp(value: Float): Float {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, resources.displayMetrics)
-    }
-
-
-    override fun onSaveInstanceState(): Parcelable? {
-        val bundle = super.onSaveInstanceState()
-        if (bundle != null) {
-            return SavedState(bundle).apply {
-                color = ColorUtils.HSLToColor(metrics.color)
-            }
-        }
-        return null
-    }
-
-    override fun onRestoreInstanceState(state: Parcelable?) {
-        if (state is SavedState) {
-            super.onRestoreInstanceState(state.superState)
-            setColor(state.color)
-        } else {
-            super.onRestoreInstanceState(state)
-        }
-    }
-
-    internal class SavedState : BaseSavedState {
-        var color: Int = 0
-
-        constructor(bundle: Parcelable) : super(bundle)
-
-        private constructor(parcel: Parcel) : super(parcel) {
-            color = parcel.readInt()
-        }
-
-        companion object {
-            @JvmField
-            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
-                override fun createFromParcel(source: Parcel): SavedState = SavedState(source)
-                override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
-            }
-        }
-
-        override fun describeContents() = 0
-
-        override fun writeToParcel(dest: Parcel, flags: Int) {
-            super.writeToParcel(dest, flags)
-            dest.writeInt(color)
-        }
     }
 }
