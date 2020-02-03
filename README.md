@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.github.madrapps:pikolo:2.0.0'
+  implementation 'com.github.madrapps:pikolo:2.0.1'
 }
 ```
 
