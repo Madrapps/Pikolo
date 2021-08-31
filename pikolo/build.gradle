@@ -1,14 +1,17 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-def projectVersion = "2.0.2"
-def projectGroupId = "com.github.madrapps"
-def siteUrl = 'https://github.com/Madrapps/Pikolo'
-def gitUrl = 'https://github.com/Madrapps/Pikolo.git'
-def fullName = "com.github.madrapps:pikolo"
+def groupId = "com.github.madrapps"
+def artifactId = "pikolo"
+def libVersion = "2.0.2"
 
-version = projectVersion
-group = projectGroupId
+ext {
+    GROUP_ID = groupId
+    ARTIFACT_ID = artifactId
+    VERSION = libVersion
+}
+
+apply from: 'publish.gradle'
 
 android {
     compileSdkVersion 30
@@ -16,6 +19,7 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 30
+        version libVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -40,86 +44,7 @@ dependencies {
     })
 }
 
-//install {
-//    repositories.mavenInstaller {
-//        pom {
-//            project {
-//                packaging 'aar'
-//
-//                groupId projectGroupId
-//
-//                name fullName
-//                description = 'An android color picker library'
-//                url siteUrl
-//
-//                licenses {
-//                    license {
-//                        name 'The Apache Software License, Version 2.0'
-//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    }
-//                }
-//                developers {
-//                    developer {
-//                        id 'instrap'
-//                        name 'Madrapps'
-//                        email 'madrasappfactory@gmail.com'
-//                    }
-//                }
-//                scm {
-//                    connection gitUrl
-//                    developerConnection gitUrl
-//                    url siteUrl
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//task sourcesJar(type: Jar) {
-//    from android.sourceSets.main.java.srcDirs
-//    classifier = 'sources'
-//}
-//
-//task javadoc(type: Javadoc) {
-//    excludes = ['**/*.kt'] // < ---- Exclude all kotlin files from javadoc file.
-//    source = android.sourceSets.main.java.srcDirs
-//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-//}
-//
-//task javadocJar(type: Jar, dependsOn: javadoc) {
-//    classifier = 'javadoc'
-//    from javadoc.destinationDir
-//}
-//
-//artifacts {
-//    archives javadocJar
-//    archives sourcesJar
-//}
-//
-//bintray {
-//    user = System.getenv('bintray_user')
-//    key = System.getenv('bintray_apikey')
-//
-//    configurations = ['archives']
-//    pkg {
-//        repo = "maven"
-//        name = fullName
-//        userOrg = "madrapps"
-//        websiteUrl = siteUrl
-//        vcsUrl = gitUrl
-//        licenses = ["Apache-2.0"]
-//        publish = true
-//        version {
-//            gpg {
-//                sign = true
-//            }
-//        }
-//    }
-//}
-
 repositories {
+    google()
     mavenCentral()
-    maven {
-        url "https://maven.google.com"
-    }
 }
