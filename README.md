@@ -49,7 +49,7 @@ together or individually. For instance, `arc_length` changes the length of the a
 `indicator_radius` - radius of the control indicator used to change color<br>
 `indicator_stroke_width` - stroke width of indicator<br>
 `indicator_stroke_color` - stroke color of indicator<br>
-`radius_offset` - the offset of the components from the center of the picker.<br>
+`radius_offset` - the offset of the components from the center of the picker<br>
 
 
 License
