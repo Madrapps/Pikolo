@@ -42,14 +42,14 @@ the color picker can be customised. There are 3 components in both pickers. You 
 together or individually. For instance, `arc_length` changes the length of the arc for all 3 components, while
 `hue_arc_length` affects only the Hue component. Various other XML attributes are as follows:<br>
 
-`arc_width` - width (thickness) of the components
-`arc_length` - length of the components
-`stroke_width` - width of the stroke of the components
-`stroke_color` - stroke color of the components
-`indicator_radius` - radius of the control indicator used to change color
-`indicator_stroke_width` - stroke width of indicator
-`indicator_stroke_color` - stroke color of indicator
-`radius_offset` - the offset of the components from the center of the picker.
+`arc_width` - width (thickness) of the components<br>
+`arc_length` - length of the components<br>
+`stroke_width` - width of the stroke of the components<br>
+`stroke_color` - stroke color of the components<br>
+`indicator_radius` - radius of the control indicator used to change color<br>
+`indicator_stroke_width` - stroke width of indicator<br>
+`indicator_stroke_color` - stroke color of indicator<br>
+`radius_offset` - the offset of the components from the center of the picker.<br>
 
 
 License
