@@ -9,11 +9,11 @@ Download
 
 ```gradle
 repositories {
-  jcenter() // or mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-  implementation 'com.github.madrapps:pikolo:2.0.1'
+  implementation 'com.github.madrapps:pikolo:2.0.2'
 }
 ```
 
@@ -36,6 +36,21 @@ colorPicker.setColorSelectionListener(new SimpleColorSelectionListener() {
   }
 });
 ```
+
+You can take a look at the [sample](https://github.com/Madrapps/Pikolo/tree/master/sample) app to see how
+the color picker can be customised. There are 3 components in both pickers. You can change their properties
+together or individually. For instance, `arc_length` changes the length of the arc for all 3 components, while
+`hue_arc_length` affects only the Hue component. Various other XML attributes are as follows:<br>
+
+`arc_width` - width (thickness) of the components
+`arc_length` - length of the components
+`stroke_width` - width of the stroke of the components
+`stroke_color` - stroke color of the components
+`indicator_radius` - radius of the control indicator used to change color
+`indicator_stroke_width` - stroke width of indicator
+`indicator_stroke_color` - stroke color of indicator
+`radius_offset` - the offset of the components from the center of the picker.
+
 
 License
 -----
